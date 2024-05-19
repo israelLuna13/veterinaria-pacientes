@@ -1,6 +1,6 @@
 import { PatientForm } from "./components/PatientForm"
 import { PatientList } from "./components/PatientList"
-
+import './index.css';
 function App() {
 
   return (
