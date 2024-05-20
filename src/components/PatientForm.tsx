@@ -1,50 +1,56 @@
 import { useForm } from "react-hook-form";
+import {toast} from 'react-toastify'
 import Error from "./Error";
 import type { DraftPatient } from "../types";
 import { usePatientStore } from "../store";
 import { useEffect } from "react";
 export const PatientForm = () => {
 
-    //extraems la funcion
-    //    const {addPatient} = usePatientStore() otra manera
-    const addPatient = usePatientStore(state => state.addPatient)
-    const activeId = usePatientStore(state => state.activeId)
-    const patients = usePatientStore(state => state.patients)
-    const updatePatient = usePatientStore(state => state.updatePatient)
+  //extraems la funcion y los state
+  //    const {addPatient} = usePatientStore() otra manera
+  const addPatient = usePatientStore((state) => state.addPatient);
+  const activeId = usePatientStore((state) => state.activeId);
+  const patients = usePatientStore((state) => state.patients);
+  const updatePatient = usePatientStore((state) => state.updatePatient);
 
-
-
-
-    //state de hooks forms
+  //states de hooks forms
   const {
     register,
     handleSubmit,
     setValue,
     formState: { errors },
- reset } = useForm<DraftPatient>();
+    reset,
+  } = useForm<DraftPatient>();
 
-
- //agregamos un paciente y reiniciamos el formulario
-  const registerPatient = (data:DraftPatient) => {
-    if(activeId){
-        updatePatient(data)
-    }else{
-        addPatient(data)
-
+  //agregamos un paciente y reiniciamos el formulario
+  const registerPatient = (data: DraftPatient) => {
+    //
+    if (activeId) {
+      //actualizamos
+      updatePatient(data);
+      toast.success("Paciente Actualizado Correctamente");
+    } else {
+      //agregamos
+      addPatient(data);
+      toast.success("Paciente Registrado Correctamente");
     }
-        reset()
-};
+    //reiniciamos el formulario
+    reset();
+  };
 
-useEffect(()=>{
-if(activeId){
-    const activePatient = patients.filter(patient => patient.id === activeId)[0]
-    setValue('name',activePatient.name)
-    setValue('carataker',activePatient.carataker)
-    setValue('date',activePatient.date)
-    setValue('email',activePatient.email)
-    setValue('symptoms',activePatient.symptoms)
-}
-},[activeId])
+  //si se le da a editar a un paciente , ponemos los datos de ese paciente en el form
+  useEffect(() => {
+    if (activeId) {
+      const activePatient = patients.filter(
+        (patient) => patient.id === activeId
+      )[0];
+      setValue("name", activePatient.name);
+      setValue("carataker", activePatient.carataker);
+      setValue("date", activePatient.date);
+      setValue("email", activePatient.email);
+      setValue("symptoms", activePatient.symptoms);
+    }
+  }, [activeId]);
 
   return (
     <div className="md:w-1/2 lg:w-2/5 mx-5">
@@ -90,9 +96,7 @@ if(activeId){
               required: "El nombre del propietario es obligatorio",
             })}
           />
-          {errors.carataker && (
-            <Error>{errors.carataker?.message}</Error>
-          )}
+          {errors.carataker && <Error>{errors.carataker?.message}</Error>}
         </div>
 
         <div className="mb-5">
@@ -112,7 +116,6 @@ if(activeId){
               },
             })}
           />
-
           {errors.email && <Error>{errors.email?.message}</Error>}
         </div>
 
@@ -143,9 +146,7 @@ if(activeId){
               required: "Los sintomas son obligatorios",
             })}
           />
-          {errors.symptoms && (
-            <Error>{errors.symptoms?.message}</Error>
-          )}
+          {errors.symptoms && <Error>{errors.symptoms?.message}</Error>}
         </div>
 
         <input

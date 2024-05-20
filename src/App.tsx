@@ -1,5 +1,7 @@
 import { PatientForm } from "./components/PatientForm"
 import { PatientList } from "./components/PatientList"
+import {ToastContainer} from 'react-toastify'
+import "react-toastify/dist/ReactToastify.css"
 import './index.css';
 function App() {
 
@@ -18,7 +20,8 @@ function App() {
 
   </div>
 </div>
-    
+    {/* componente para mostrar los mensajes de exito o de error */}
+    <ToastContainer/>
 </>
   )
 }
